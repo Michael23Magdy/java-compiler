@@ -25,7 +25,7 @@ public:
     StateID addState();
     void addTransition(StateID from, StateID to, Symbol symbol);
     void setAccepting(StateID state, bool isAccepting, const std::string& tokenClass = "", TokenPriority priority = -1);
-    
+
     void setNFAStates(StateID state, const std::set<StateID>& nfaStates);
     std::set<StateID> getNFAStates(StateID state) const;
 

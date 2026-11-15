@@ -1,0 +1,7 @@
+# definitions built from earlier definitions
+n 123
+n 123456
+n 123
+!ERR 1 1:5
+!ERR 2 1:6
+!ERR 4 1:18

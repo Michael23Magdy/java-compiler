@@ -1,0 +1,3 @@
+# a rule class called like a letter in a regex does not confuse definitions
+E 1E2
+E 12E345

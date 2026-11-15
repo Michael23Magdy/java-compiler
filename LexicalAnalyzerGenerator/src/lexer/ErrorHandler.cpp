@@ -21,4 +21,4 @@ void ErrorHandler::printErrors(std::ostream& out) const {
     }
 }
 
-} // namespace compiler
+}

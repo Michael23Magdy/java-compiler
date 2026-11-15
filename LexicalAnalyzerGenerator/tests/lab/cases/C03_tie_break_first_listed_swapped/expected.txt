@@ -1,0 +1,4 @@
+# same rules, swapped order -> other rule wins
+r2 ab
+r2 b
+r2 aab

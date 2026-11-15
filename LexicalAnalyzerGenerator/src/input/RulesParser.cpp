@@ -7,12 +7,6 @@ std::vector<Rule> RulesParser::parse(const std::vector<std::string>& lines) {
     tokenRules_.clear();
     nextPriority_ = 1;
 
-    // Iterate over each line and categorize:
-    // 1. Keywords: { ... } -> parseKeywords()
-    // 2. Punctuations: [ ... ] -> parsePunctuations()
-    // 3. Regular definitions: LHS = RHS -> parseRegularDefinition()
-    // 4. Regular expressions: LHS: RHS -> parseRegularExpression()
-
     for (const std::string& line : lines) {
         if (line.empty()) {
             continue;
@@ -35,7 +29,7 @@ std::vector<Rule> RulesParser::parse(const std::vector<std::string>& lines) {
             parseRegularDefinition(line);
         }
         else {
-            // We should report a malformed rule.
+
             std::cerr << "Error: Malformed lexical rule: " << line << '\n';
             continue;
         }
@@ -45,7 +39,7 @@ std::vector<Rule> RulesParser::parse(const std::vector<std::string>& lines) {
 }
 
 void RulesParser::parseKeywords(const std::string& line) {
-    // Extract keywords from `{ kw1 kw2 ... }` and add each as a Rule with high priority
+
     size_t start = line.find('{');
     size_t end = line.find('}');
 
@@ -69,18 +63,29 @@ void RulesParser::parseKeywords(const std::string& line) {
         rule.name = keyword;
         rule.expression = keyword;
         rule.type = RuleType::KEYWORD;
-        // Keywords are reserved: priority 0 beats every regex rule (which start at 1),
+
         rule.priority = 0;
 
         tokenRules_.push_back(rule);
     }
-   
+
 }
 
 void RulesParser::parsePunctuations(const std::string& line) {
-    // Extract punctuation symbols from `[ p1 p2 ... ]` and add each as a Rule
+
     size_t start = line.find('[');
-    size_t end = line.find(']');
+    size_t end = std::string::npos;
+
+    if (start != std::string::npos) {
+        for (size_t i = start + 1; i < line.size(); ++i) {
+            if (line[i] == '\\') {
+                ++i;
+            } else if (line[i] == ']') {
+                end = i;
+                break;
+            }
+        }
+    }
 
     if (start == std::string::npos ||
         end == std::string::npos ||
@@ -95,7 +100,6 @@ void RulesParser::parsePunctuations(const std::string& line) {
 
     for (size_t i = 0; i < inside.size();) {
 
-        // Skip whitespace.
         if (std::isspace(
                 static_cast<unsigned char>(inside[i])
             )) {
@@ -105,7 +109,6 @@ void RulesParser::parsePunctuations(const std::string& line) {
 
         std::string expression;
 
-        // Preserve escaped punctuation such as \( and \).
         if (inside[i] == '\\') {
             expression += inside[i++];
 
@@ -119,7 +122,6 @@ void RulesParser::parsePunctuations(const std::string& line) {
 
         Rule rule;
 
-        // The token class is the literal punctuation.
         rule.name = (expression.size() == 2 &&
                      expression[0] == '\\')
                         ? expression.substr(1)
@@ -134,7 +136,7 @@ void RulesParser::parsePunctuations(const std::string& line) {
 }
 
 void RulesParser::parseRegularDefinition(const std::string& line) {
-    // Parse `LHS = RHS`, expand any prior definitions in RHS, and store in definitions_
+
      size_t equalPos = line.find('=');
 
     if (equalPos == std::string::npos) {
@@ -153,7 +155,7 @@ void RulesParser::parseRegularDefinition(const std::string& line) {
 }
 
 void RulesParser::parseRegularExpression(const std::string& line) {
-    // Parse `LHS: RHS`, expand definitions in RHS, and add to tokenRules_ with nextPriority_++
+
     size_t colonPos = line.find(':');
 
     if (colonPos == std::string::npos) {
@@ -178,12 +180,11 @@ void RulesParser::parseRegularExpression(const std::string& line) {
 }
 
 std::string RulesParser::expandDefinitions(const std::string& expr) {
-    // Replace identifiers in expr with their expanded definitions from definitions_
+
     std::string result;
 
     for (size_t i = 0; i < expr.size();) {
 
-        // Detect an identifier.
         if (std::isalpha(
                 static_cast<unsigned char>(expr[i])
             ) || expr[i] == '_') {
@@ -231,4 +232,4 @@ std::string RulesParser::trim(const std::string& str) {
     return str.substr(first, last - first + 1);
 }
 
-} // namespace compiler
+}

@@ -1,0 +1,9 @@
+# exponent E digits after a fractional part
+num 1.5E3
+num 2.0E10
+num 1.5E0
+num 12.34E56
+num 1.5E3
+id x
+--symbols--
+x 1

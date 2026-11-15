@@ -64,7 +64,7 @@ Token Lexer::getNextToken() {
             }
             cursor_ = lastAcceptingPos;
 
-            if (tokenClass == "id") {
+            if (!identifierClass_.empty() && tokenClass == identifierClass_) {
                 symbolTable_.insert(lexeme, startLine);
             }
             return Token{tokenClass, lexeme, startLine, startCol};
@@ -88,4 +88,4 @@ std::vector<Token> Lexer::tokenizeAll() {
     return tokens;
 }
 
-} // namespace compiler
+}

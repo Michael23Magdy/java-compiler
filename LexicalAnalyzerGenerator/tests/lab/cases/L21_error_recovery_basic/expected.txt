@@ -1,0 +1,9 @@
+# invalid char is reported and scanning continues
+int int
+id a
+id b
+; ;
+!ERR @ 1:7
+--symbols--
+a 1
+b 1

@@ -96,4 +96,4 @@ private:
     std::shared_ptr<RegexNode> child_;
 };
 
-} // namespace compiler
+}

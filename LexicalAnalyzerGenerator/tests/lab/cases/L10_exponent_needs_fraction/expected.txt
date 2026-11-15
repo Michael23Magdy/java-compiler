@@ -1,0 +1,8 @@
+# per the given rule num: digit+ | digit+ . digits (\L | E digits) the E part needs the fraction
+num 10
+id E5
+num 5
+id E
+--symbols--
+E5 1
+E 1

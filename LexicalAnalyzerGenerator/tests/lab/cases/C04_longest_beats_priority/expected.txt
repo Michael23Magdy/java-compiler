@@ -1,0 +1,6 @@
+# a longer match of a later rule beats a shorter match of an earlier one
+long aab
+short a
+short a
+short a
+long aab

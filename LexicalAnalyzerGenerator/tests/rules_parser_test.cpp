@@ -1,4 +1,3 @@
-
 #include "input/RulesParser.h"
 
 #include <cassert>
@@ -27,7 +26,6 @@ int main() {
     RulesParser parser;
     std::vector<Rule> rules = parser.parse(lines);
 
-    // 1. Check regular definitions.
     const auto& definitions = parser.getDefinitions();
 
     assert(definitions.size() == 3);
@@ -37,7 +35,6 @@ int main() {
 
     std::cout << "Regular definitions: PASSED\n";
 
-    // Helper to find a rule by its name.
     auto findRule = [&rules](const std::string& name) -> const Rule* {
         for (const Rule& rule : rules) {
             if (rule.name == name) {
@@ -47,7 +44,6 @@ int main() {
         return nullptr;
     };
 
-    // 2. Check regular expressions.
     assert(findRule("id") != nullptr);
     assert(findRule("num") != nullptr);
     assert(findRule("relop") != nullptr);
@@ -59,12 +55,10 @@ int main() {
     assert(findRule("relop")->type == RuleType::REGULAR_EXPRESSION);
     assert(findRule("assign")->type == RuleType::REGULAR_EXPRESSION);
 
-    // Make sure assign was not mistaken for a definition.
     assert(findRule("assign")->expression == "=");
 
     std::cout << "Regular expressions: PASSED\n";
 
-    // 3. Check keywords.
     std::vector<std::string> keywords = {
         "boolean", "int", "float",
         "if", "else", "while"
@@ -80,7 +74,6 @@ int main() {
 
     std::cout << "Keywords: PASSED\n";
 
-    // 4. Check punctuations.
     std::vector<std::string> punctuations = {
         ";", ",", "(", ")", "{", "}"
     };
@@ -92,13 +85,11 @@ int main() {
         assert(rule->type == RuleType::PUNCTUATION);
     }
 
-    // Escaped parentheses must retain their backslashes.
     assert(findRule("(")->expression == "\\(");
     assert(findRule(")")->expression == "\\)");
 
     std::cout << "Punctuations: PASSED\n";
 
-    // 5. Check total counts.
     assert(definitions.size() == 3);
     assert(rules.size() == 18);
 

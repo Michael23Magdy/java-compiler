@@ -15,12 +15,10 @@ StateID NFA::addState() {
 StateID NFA::append(const NFA& other, std::vector<StateID>& stateMap) {
     stateMap.resize(other.size());
 
-    // Create corresponding states.
     for (const auto& state : other.getStates()) {
         stateMap[state.id] = addState();
     }
 
-    // Copy accepting information.
     for (const auto& state : other.getStates()) {
         if (state.isAccepting) {
             setAccepting(
@@ -32,7 +30,6 @@ StateID NFA::append(const NFA& other, std::vector<StateID>& stateMap) {
         }
     }
 
-    // Copy transitions using the new state IDs.
     for (const auto& state : other.getStates()) {
         for (const auto& [symbol, destinations] : state.transitions) {
             for (StateID destination : destinations) {
@@ -85,4 +82,4 @@ std::vector<StateID> NFA::getTransitions(StateID from, Symbol symbol) const {
     return {};
 }
 
-} // namespace compiler
+}

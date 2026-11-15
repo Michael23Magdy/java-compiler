@@ -10,7 +10,6 @@ void testThompsonConstruction() {
 
     std::cout << "[Test] Running Thompson Construction tests...\n";
 
-    // 1. Literal NFA: a
     NFA literal = NFAConstructor::createLiteralNFA('a');
 
     assert(literal.size() == 2);
@@ -21,7 +20,6 @@ void testThompsonConstruction() {
     assert(literalTransitions[0] == 1);
     assert(literal.getState(1).isAccepting);
 
-    // 2. Epsilon NFA: lambda
     NFA epsilon = NFAConstructor::createEpsilonNFA();
 
     assert(epsilon.size() == 2);
@@ -34,7 +32,6 @@ void testThompsonConstruction() {
 
     std::cout << "  -> Literal and epsilon NFAs passed.\n";
 
-    // Concatenation: ab
     NFA a = NFAConstructor::createLiteralNFA('a');
     NFA b = NFAConstructor::createLiteralNFA('b');
 
@@ -55,7 +52,6 @@ void testThompsonConstruction() {
 
     std::cout << "  -> Concatenation passed.\n";
 
-    // Union: a | b
     NFA unionNFA = NFAConstructor::createUnionNFA(a, b);
 
     assert(unionNFA.size() == 6);
@@ -69,8 +65,6 @@ void testThompsonConstruction() {
 
     std::cout << "  -> Union passed.\n";
 
-
-    // Star: a*
     NFA starNFA = NFAConstructor::createStarNFA(a);
 
     assert(starNFA.size() == 4);
@@ -84,8 +78,6 @@ void testThompsonConstruction() {
 
     std::cout << "  -> Star passed.\n";
 
-
-    // Plus: a+
     NFA plusNFA = NFAConstructor::createPlusNFA(a);
 
     assert(plusNFA.size() == 4);
@@ -100,7 +92,6 @@ void testThompsonConstruction() {
     std::cout << "  -> Plus passed.\n";
 }
 
-
 void testBuildFromAST() {
     using namespace compiler;
 
@@ -109,7 +100,6 @@ void testBuildFromAST() {
     RegexParser parser;
     NFAConstructor constructor;
 
-    // Test: a(b|c)*
     auto ast = parser.parse("a(b|c)*");
 
     NFA nfa = constructor.buildFromAST(ast, "id", 5);
@@ -125,8 +115,6 @@ void testBuildFromAST() {
 
     std::cout << "  -> AST to NFA passed.\n";
 }
-
-
 
 void testNFAMerging() {
     using namespace compiler;
@@ -149,14 +137,11 @@ void testNFAMerging() {
 
     NFA combined = merger.merge({keyword, identifier, number});
 
-    // One common start + 2 states for each original NFA.
     assert(combined.size() == 7);
 
-    // All three NFAs should be reachable from the common start.
     assert(combined.getTransitions(
         combined.getStartState(), EPSILON).size() == 3);
 
-    // All three accepting states must be preserved.
     assert(combined.getAcceptStates().size() == 3);
 
     bool foundKeyword = false;

@@ -8,18 +8,15 @@ void testRegexUtils() {
 
     std::cout << "[Test] Running RegexUtils tests...\n";
 
-    // Range expansion
     assert(RegexUtils::expandRanges("a-z") ==
            "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)");
 
     assert(RegexUtils::expandRanges("0 - 2") == "(0|1|2)");
 
-    // Escaped characters must remain escaped.
     assert(RegexUtils::expandRanges("\\+ | \\-") == "\\+|\\-");
 
     std::cout << "  -> Range expansion passed.\n";
 
-    // Explicit concatenation
     assert(RegexUtils::insertExplicitConcat("ab") ==
            std::string("a") + EXPLICIT_CONCAT + "b");
 
@@ -35,7 +32,6 @@ void testRegexUtils() {
 
     std::cout << "  -> Explicit concatenation passed.\n";
 
-    // Infix to postfix
     std::string concat = std::string(1, EXPLICIT_CONCAT);
 
     assert(RegexUtils::infixToPostfix(
@@ -56,27 +52,21 @@ void testRegexParser() {
 
     RegexParser parser;
 
-    // Union: a|b
     auto ast = parser.parse("a|b");
     assert(ast->getType() == RegexNodeType::UNION);
 
-    // Concatenation: ab
     ast = parser.parse("ab");
     assert(ast->getType() == RegexNodeType::CONCAT);
 
-    // Kleene star: a*
     ast = parser.parse("a*");
     assert(ast->getType() == RegexNodeType::STAR);
 
-    // Plus: a+
     ast = parser.parse("a+");
     assert(ast->getType() == RegexNodeType::PLUS);
 
-    // Lambda: \L
     ast = parser.parse("\\L");
     assert(ast->getType() == RegexNodeType::EPSILON);
 
-    // Escaped operator: \+
     ast = parser.parse("\\+");
     assert(ast->getType() == RegexNodeType::LITERAL);
 
@@ -84,7 +74,6 @@ void testRegexParser() {
     assert(literal != nullptr);
     assert(literal->getCharacter() == '+');
 
-    // Combined expression: a(b|c)*
     ast = parser.parse("a(b|c)*");
     assert(ast->getType() == RegexNodeType::CONCAT);
 

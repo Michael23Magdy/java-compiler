@@ -1,0 +1,29 @@
+# the exact test program of the assignment sheet
+int int
+id sum
+, ,
+id count
+, ,
+id pass
+, ,
+id mnt
+; ;
+while while
+( (
+id pass
+relop !=
+num 10
+) )
+{ {
+id pass
+assign =
+id pass
+addop +
+num 1
+; ;
+} }
+--symbols--
+sum 1
+count 1
+pass 1
+mnt 1

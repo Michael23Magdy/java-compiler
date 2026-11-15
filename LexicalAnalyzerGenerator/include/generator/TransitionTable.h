@@ -9,16 +9,10 @@
 
 namespace compiler {
 
-/**
- * @brief Represents a tabular DFA transition table for fast lexical analysis and export.
- */
 class TransitionTable {
 public:
     TransitionTable() = default;
 
-    /**
-     * @brief Builds transition table from a DFA.
-     */
     static TransitionTable fromDFA(const DFA& dfa);
 
     StateID getNextState(StateID current, Symbol symbol) const;
@@ -37,9 +31,9 @@ private:
     size_t stateCount_ = 0;
     std::vector<Symbol> alphabet_;
     std::map<Symbol, int> symbolToIndex_;
-    // table_[state][symbolIndex] = nextState
+
     std::vector<std::vector<StateID>> table_;
     std::vector<StateInfo> stateInfos_;
 };
 
-} // namespace compiler
+}

@@ -1,0 +1,5 @@
+# (ab)+
+s ababab
+s ab
+s ab
+!ERR a 1:13

@@ -1,0 +1,7 @@
+# unsigned integers incl. leading zeros
+num 0
+num 7
+num 007
+num 123456789
+num 42
+--symbols--

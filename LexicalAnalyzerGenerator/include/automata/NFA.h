@@ -14,7 +14,7 @@ struct NFAState {
     bool isAccepting = false;
     std::string tokenClass = "";
     TokenPriority priority = -1;
-    // Maps transition symbol (including EPSILON) to destination state IDs
+
     std::map<Symbol, std::vector<StateID>> transitions;
 };
 
@@ -51,4 +51,4 @@ private:
     std::set<Symbol> alphabet_;
 };
 
-} // namespace compiler
+}

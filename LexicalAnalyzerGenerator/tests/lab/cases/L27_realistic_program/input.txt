@@ -1,0 +1,7 @@
+boolean flag ; float x ; int count ;
+count = 0 ;
+x = 3.14E2 ;
+while ( count < 10 ) {
+  if ( count >= 5 ) { flag = count != 7 ; } else { count = count * 2 + 1 ; }
+  count = count - 1 ;
+}

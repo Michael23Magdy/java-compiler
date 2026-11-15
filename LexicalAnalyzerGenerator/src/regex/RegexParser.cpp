@@ -7,27 +7,23 @@
 namespace compiler {
 
 std::string RegexParser::preprocess(const std::string& regex) {
-    // 1. Expand character ranges.
+
     std::string expanded = RegexUtils::expandRanges(regex);
 
-    // 2. Insert explicit concatenation operators.
     return RegexUtils::insertExplicitConcat(expanded);
 }
 
 std::shared_ptr<RegexNode> RegexParser::parse(const std::string& regex) {
-    // 1. Preprocess the regular expression.
+
     std::string infix = preprocess(regex);
 
-    // 2. Convert infix notation to postfix notation.
     std::string postfix = RegexUtils::infixToPostfix(infix);
 
-    // 3. Construct the AST using a stack.
     std::vector<std::shared_ptr<RegexNode>> stack;
 
     for (size_t i = 0; i < postfix.size(); ++i) {
         char current = postfix[i];
 
-        // Handle escaped characters and lambda.
         if (current == '\\') {
             if (i + 1 >= postfix.size()) {
                 throw std::invalid_argument("Incomplete escape sequence");
@@ -44,7 +40,6 @@ std::shared_ptr<RegexNode> RegexParser::parse(const std::string& regex) {
             continue;
         }
 
-        // Handle binary operators.
         if (current == EXPLICIT_CONCAT || current == '|') {
             if (stack.size() < 2) {
                 throw std::invalid_argument("Invalid regular expression: missing operands");
@@ -65,7 +60,6 @@ std::shared_ptr<RegexNode> RegexParser::parse(const std::string& regex) {
             continue;
         }
 
-        // Handle unary operators.
         if (current == '*' || current == '+') {
             if (stack.empty()) {
                 throw std::invalid_argument("Invalid regular expression: missing operand");
@@ -83,11 +77,9 @@ std::shared_ptr<RegexNode> RegexParser::parse(const std::string& regex) {
             continue;
         }
 
-        // Handle ordinary characters.
         stack.push_back(std::make_shared<LiteralNode>(current));
     }
 
-    // A valid expression must produce exactly one AST root.
     if (stack.size() != 1) {
         throw std::invalid_argument("Invalid regular expression");
     }
@@ -95,4 +87,4 @@ std::shared_ptr<RegexNode> RegexParser::parse(const std::string& regex) {
     return stack.back();
 }
 
-} // namespace compiler
+}

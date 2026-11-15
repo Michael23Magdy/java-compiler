@@ -1,0 +1,27 @@
+# each identifier once, first-occurrence line; keywords/numbers excluded
+int int
+id x
+; ;
+id x
+assign =
+id y
+; ;
+id y
+assign =
+id x
+addop +
+id z
+; ;
+if if
+( (
+id w
+) )
+id z
+assign =
+num 1
+; ;
+--symbols--
+x 1
+y 1
+z 2
+w 3

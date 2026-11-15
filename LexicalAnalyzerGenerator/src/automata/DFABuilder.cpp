@@ -38,7 +38,7 @@ DFA DFABuilder::build(const NFA& nfa) {
     StateID initialDFAStateID = dfa.addState();
     dfa.setStartState(initialDFAStateID);
     dfa.setNFAStates(initialDFAStateID, epsilonClosure(nfa.getStartState(), nfa));
-    
+
     std::map<std::set<StateID>, StateID> dfaStateMap;
     dfaStateMap[dfa.getNFAStates(initialDFAStateID)] = initialDFAStateID;
     std::queue<StateID> worklist;

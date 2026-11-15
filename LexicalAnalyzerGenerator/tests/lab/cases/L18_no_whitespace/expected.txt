@@ -1,0 +1,22 @@
+# blanks are optional
+int int
+id a
+assign =
+num 1
+; ;
+if if
+( (
+id a
+relop <=
+num 2
+) )
+{ {
+id a
+assign =
+id a
+addop +
+num 1
+; ;
+} }
+--symbols--
+a 1

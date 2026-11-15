@@ -11,7 +11,7 @@
 void testSubsetConstruction() {
     std::cout << "[Test] Running Subset Construction tests...\n";
     using namespace compiler;
-    // NFA for a(a|b)*: 0 -a-> 1, 1 -eps-> 2, 2 -a-> 3, 2 -b-> 3, 3 -eps-> 1, 3 accepting
+
     NFA nfa;
     for (int i = 0; i < 4; i++) nfa.addState();
     nfa.setStartState(0);
@@ -59,7 +59,7 @@ void testTransitionTable() {
 void testPipeline5to7() {
     std::cout << "[Test] Running NFA -> DFA -> min DFA -> table pipeline...\n";
     using namespace compiler;
-    // Two tokens: "ab" (KW, prio 0) and (a|b)+ (ID, prio 1) as one merged NFA.
+
     NFA nfa;
     for (int i = 0; i < 6; i++) nfa.addState();
     nfa.setStartState(0);
@@ -78,7 +78,7 @@ void testPipeline5to7() {
     StateID a = t.getNextState(st, 'a');
     StateID ab = t.getNextState(a, 'b');
     assert(t.getTokenClass(a) == "ID");
-    assert(t.getTokenClass(ab) == "KW");      // priority resolves overlap
+    assert(t.getTokenClass(ab) == "KW");
     assert(t.getTokenClass(t.getNextState(ab, 'a')) == "ID");
     assert(TableExporter::exportToFile(t, "output/pipeline_test_table.txt"));
     std::cout << "  -> Pipeline 5-7 tests passed.\n";
@@ -89,7 +89,6 @@ void testDFAMinimization() {
     using namespace compiler;
     DFAMinimizer minimizer;
 
-    // Equivalent accepting states 1 and 2 (same token) must merge: 4 -> 3 states.
     DFA d;
     for (int i = 0; i < 4; i++) d.addState();
     d.setStartState(0);
@@ -104,7 +103,6 @@ void testDFAMinimization() {
     DFA m = minimizer.minimize(d);
     assert(m.size() == 3);
 
-    // Same structure but different token classes: must NOT merge.
     d.setAccepting(2, true, "Y", 0);
     assert(minimizer.minimize(d).size() == 4);
     std::cout << "  -> DFA minimization tests passed.\n";

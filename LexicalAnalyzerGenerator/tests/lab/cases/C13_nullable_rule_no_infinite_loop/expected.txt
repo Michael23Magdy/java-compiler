@@ -1,0 +1,5 @@
+# a regex matching the empty string never yields empty tokens
+t aa
+t a
+!ERR b 1:3
+!ERR b 1:5

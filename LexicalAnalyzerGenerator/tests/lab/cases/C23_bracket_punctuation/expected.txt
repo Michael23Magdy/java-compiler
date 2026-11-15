@@ -1,0 +1,9 @@
+# escaped [ and ] used as punctuation
+[ [
+id a
+] ]
+; ;
+id b
+--symbols--
+a 1
+b 1

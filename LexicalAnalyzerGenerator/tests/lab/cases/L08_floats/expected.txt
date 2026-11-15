@@ -1,0 +1,7 @@
+# digits . digits
+num 1.5
+num 0.0
+num 10.25
+num 3.14159
+num 007.500
+--symbols--

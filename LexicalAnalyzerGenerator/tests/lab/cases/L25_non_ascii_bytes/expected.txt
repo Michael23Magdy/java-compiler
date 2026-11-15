@@ -1,0 +1,8 @@
+# UTF-8 bytes are plain invalid characters (must not crash)
+id caf
+id x
+!ERR 0xc3 1:4
+!ERR 0xa9 1:5
+--symbols--
+caf 1
+x 1

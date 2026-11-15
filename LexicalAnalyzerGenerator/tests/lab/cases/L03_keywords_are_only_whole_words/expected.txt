@@ -1,0 +1,26 @@
+# keywords as prefix/suffix of identifiers, case sensitivity
+id integer
+id intx
+id xint
+id iff
+id elsee
+id else1
+id whiles
+id While
+id INT
+id Float
+id boolean2
+id if1
+--symbols--
+integer 1
+intx 1
+xint 1
+iff 1
+elsee 1
+else1 1
+whiles 1
+While 1
+INT 1
+Float 1
+boolean2 1
+if1 1

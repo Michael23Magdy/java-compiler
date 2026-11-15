@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cassert>
 #include <vector>
@@ -14,7 +13,6 @@ using namespace compiler;
 void testNFAIntegration() {
     std::cout << "=== Running NFA Integration Test ===\n";
 
-    // 1. Read lexical rules
     std::cout << "[Test] Reading lexical rules...\n";
 
     RulesReader reader;
@@ -22,7 +20,6 @@ void testNFAIntegration() {
 
     assert(!lines.empty());
 
-    // 2. Parse lexical rules
     std::cout << "[Test] Parsing lexical rules...\n";
 
     RulesParser rulesParser;
@@ -33,7 +30,6 @@ void testNFAIntegration() {
     std::cout << "  -> Parsed " << rules.size()
               << " token specifications.\n";
 
-    // 3. Build an NFA for every token rule
     std::cout << "[Test] Constructing individual NFAs...\n";
 
     RegexParser regexParser;
@@ -54,7 +50,6 @@ void testNFAIntegration() {
 
         assert(!nfa.getAcceptStates().empty());
 
-        // Verify accepting-state metadata
         for (StateID accept : nfa.getAcceptStates()) {
             const auto& state = nfa.getState(accept);
 
@@ -71,13 +66,11 @@ void testNFAIntegration() {
     std::cout << "  -> Built " << tokenNfas.size()
               << " individual NFAs.\n";
 
-    // 4. Merge all token NFAs
     std::cout << "[Test] Merging individual NFAs...\n";
 
     NFAMerger merger;
     NFA combinedNFA = merger.merge(tokenNfas);
 
-    // 5. Validate the combined NFA
     std::cout << "[Test] Validating combined NFA...\n";
 
     size_t expectedStates = 1;
@@ -91,8 +84,6 @@ void testNFAIntegration() {
     assert(combinedNFA.size() == expectedStates);
     assert(combinedNFA.getAcceptStates().size() == expectedAcceptStates);
 
-    // The new start state must have one epsilon transition
-    // to each individual NFA's start state.
     auto startTransitions = combinedNFA.getTransitions(
         combinedNFA.getStartState(),
         EPSILON
@@ -100,7 +91,6 @@ void testNFAIntegration() {
 
     assert(startTransitions.size() == tokenNfas.size());
 
-    // Verify all accepting states and their metadata are preserved
     std::vector<bool> matched(combinedNFA.getAcceptStates().size(), false);
 
     for (const auto& nfa : tokenNfas) {

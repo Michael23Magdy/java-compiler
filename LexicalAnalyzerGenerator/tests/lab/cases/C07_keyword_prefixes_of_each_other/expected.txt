@@ -1,0 +1,10 @@
+# keywords that are prefixes of other keywords/ids
+do do
+double double
+id doubl
+id dou
+id doubled
+--symbols--
+doubl 1
+dou 1
+doubled 1

@@ -1,0 +1,3 @@
+lower: a-f
+dig: 0-3
+up: A - C

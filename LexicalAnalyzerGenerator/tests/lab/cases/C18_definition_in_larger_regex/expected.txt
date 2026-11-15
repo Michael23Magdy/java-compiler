@@ -1,0 +1,4 @@
+# w: l+ (\- l+)*
+w foo-bar-baz
+w x
+!ERR - 1:14

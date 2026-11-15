@@ -1,0 +1,5 @@
+# 'd' must not be substituted inside 'digit'
+t 5x
+t 7x
+!ERR x 1:7
+!ERR 5 1:8

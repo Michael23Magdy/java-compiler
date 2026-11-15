@@ -1,0 +1,10 @@
+star: \*
+plus: \+
+bar: \|
+lp: \(
+rp: \)
+dash: \-
+dot: \.
+bs: \\
+eq: \=
+colon: \:
