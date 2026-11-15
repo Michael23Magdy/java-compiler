@@ -1,0 +1,4 @@
+# same length match -> rule listed first wins
+r1 ab
+r2 b
+r2 aab

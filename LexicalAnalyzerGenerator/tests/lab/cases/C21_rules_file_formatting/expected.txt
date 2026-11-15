@@ -1,0 +1,9 @@
+# CRLF, blank/blank-with-spaces lines, tabs, no blanks around = and :, extra blanks
+if if
+id x1
+; ;
+num 22
+, ,
+else else
+--symbols--
+x1 1

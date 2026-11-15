@@ -1,0 +1,11 @@
+# reserved symbols are matched literally after a backslash
+star *
+plus +
+bar |
+lp (
+rp )
+dash -
+dot .
+bs \
+eq =
+colon :

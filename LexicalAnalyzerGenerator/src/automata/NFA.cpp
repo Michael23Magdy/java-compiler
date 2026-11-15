@@ -12,6 +12,39 @@ StateID NFA::addState() {
     return id;
 }
 
+StateID NFA::append(const NFA& other, std::vector<StateID>& stateMap) {
+    stateMap.resize(other.size());
+
+    for (const auto& state : other.getStates()) {
+        stateMap[state.id] = addState();
+    }
+
+    for (const auto& state : other.getStates()) {
+        if (state.isAccepting) {
+            setAccepting(
+                stateMap[state.id],
+                true,
+                state.tokenClass,
+                state.priority
+            );
+        }
+    }
+
+    for (const auto& state : other.getStates()) {
+        for (const auto& [symbol, destinations] : state.transitions) {
+            for (StateID destination : destinations) {
+                addTransition(
+                    stateMap[state.id],
+                    stateMap[destination],
+                    symbol
+                );
+            }
+        }
+    }
+
+    return stateMap[other.getStartState()];
+}
+
 void NFA::addTransition(StateID from, StateID to, Symbol symbol) {
     if (from >= 0 && static_cast<size_t>(from) < states_.size()) {
         states_[from].transitions[symbol].push_back(to);
@@ -49,4 +82,4 @@ std::vector<StateID> NFA::getTransitions(StateID from, Symbol symbol) const {
     return {};
 }
 
-} // namespace compiler
+}

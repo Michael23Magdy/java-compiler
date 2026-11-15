@@ -1,0 +1,10 @@
+# must fall back to the last accepting prefix
+x abcd
+x ab
+x ab
+x ab
+x a
+y b
+!ERR c 1:11
+!ERR c 1:15
+!ERR e 1:16

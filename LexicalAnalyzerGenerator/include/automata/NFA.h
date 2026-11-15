@@ -14,7 +14,7 @@ struct NFAState {
     bool isAccepting = false;
     std::string tokenClass = "";
     TokenPriority priority = -1;
-    // Maps transition symbol (including EPSILON) to destination state IDs
+
     std::map<Symbol, std::vector<StateID>> transitions;
 };
 
@@ -23,6 +23,7 @@ public:
     NFA();
 
     StateID addState();
+    StateID append(const NFA& other, std::vector<StateID>& stateMap);
     void addTransition(StateID from, StateID to, Symbol symbol);
     void setAccepting(StateID state, bool isAccepting, const std::string& tokenClass = "", TokenPriority priority = -1);
 
@@ -50,4 +51,4 @@ private:
     std::set<Symbol> alphabet_;
 };
 
-} // namespace compiler
+}

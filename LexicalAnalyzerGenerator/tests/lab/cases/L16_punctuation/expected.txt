@@ -1,0 +1,23 @@
+# ( ) { } , ; are tokens whose class is the symbol itself
+( (
+) )
+{ {
+} }
+, ,
+; ;
+( (
+id a
+, ,
+id b
+) )
+; ;
+{ {
+} }
+; ;
+; ;
+; ;
+, ,
+, ,
+--symbols--
+a 2
+b 2

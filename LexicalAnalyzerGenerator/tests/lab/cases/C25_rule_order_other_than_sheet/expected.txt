@@ -1,0 +1,14 @@
+# operators listed before id; keywords listed last still win
+if if
+id x1
+relop ==
+id y
+else else
+( (
+id z
+) )
+; ;
+--symbols--
+x1 1
+y 1
+z 1

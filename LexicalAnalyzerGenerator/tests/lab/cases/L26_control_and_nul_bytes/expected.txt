@@ -1,0 +1,10 @@
+# control chars / NUL are invalid characters (must not crash)
+id a
+id b
+id c
+!ERR 0x1 1:2
+!ERR 0x0 1:4
+--symbols--
+a 1
+b 1
+c 1

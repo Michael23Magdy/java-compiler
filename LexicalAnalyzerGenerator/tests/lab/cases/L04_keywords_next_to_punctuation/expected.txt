@@ -1,0 +1,17 @@
+# keywords glued to punctuation
+if if
+( (
+id x
+) )
+else else
+{ {
+while while
+( (
+id y
+) )
+int int
+; ;
+} }
+--symbols--
+x 1
+y 1

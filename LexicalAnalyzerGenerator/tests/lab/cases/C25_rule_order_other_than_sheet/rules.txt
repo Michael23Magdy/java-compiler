@@ -1,0 +1,9 @@
+relop: \=\= | !\= | > | >\= | < | <\=
+assign: =
+addop: \+ | \-
+mulop: \* | /
+letter = a-z | A-Z
+digit = 0 - 9
+id: letter (letter|digit)*
+{ if else }
+[; \( \)]

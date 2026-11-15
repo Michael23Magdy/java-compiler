@@ -26,32 +26,54 @@ void Lexer::skipWhitespace() {
 }
 
 Token Lexer::getNextToken() {
-    skipWhitespace();
+    while(true){
+        skipWhitespace();
 
-    if (cursor_ >= source_.length()) {
-        return Token{"$", "$", currentLine_, currentColumn_};
+        if (cursor_ >= source_.length()) {
+            return Token{"$", "$", currentLine_, currentColumn_};
+        }
+
+        int startLine = currentLine_;
+        int startCol = currentColumn_;
+
+        StateID state = table_.getStartState();
+        StateID lastAcceptingState = INVALID_STATE;
+        size_t lastAcceptingPos = cursor_;
+        size_t pos = cursor_;
+        while (pos < source_.length())
+        {
+            state = table_.getNextState(state, source_[pos]);
+            if (state == DEAD_STATE) break;
+            pos++;
+            if (table_.isAccepting(state)) {
+                lastAcceptingState = state;
+                lastAcceptingPos = pos;
+            }
+        }
+
+        if (lastAcceptingState != INVALID_STATE) {
+            std::string lexeme = source_.substr(cursor_, lastAcceptingPos - cursor_);
+            std::string tokenClass = table_.getTokenClass(lastAcceptingState);
+            for (char c : lexeme) {
+                if (c == '\n') {
+                    currentLine_++;
+                    currentColumn_ = 1;
+                } else {
+                    currentColumn_++;
+                }
+            }
+            cursor_ = lastAcceptingPos;
+
+            if (!identifierClass_.empty() && tokenClass == identifierClass_) {
+                symbolTable_.insert(lexeme, startLine);
+            }
+            return Token{tokenClass, lexeme, startLine, startCol};
+        }
+        char errorChar = source_[cursor_];
+        errorHandler_.reportError("Unrecognized character", startLine, startCol, errorChar);
+        cursor_++;
+        currentColumn_++;
     }
-
-    // TODO: Implement DFA Simulation with Maximal Munch (Longest Match):
-    // 1. Start from DFA startState_
-    // 2. Read characters from source_[cursor_] one by one and transition in table_
-    // 3. Keep track of the last accepting state seen and the input position at that accept state
-    // 4. When DFA reaches DEAD_STATE or EOF:
-    //    a) If an accepting state was reached earlier:
-    //       - Roll back cursor_ to the position of that match (longest prefix)
-    //       - Extract lexeme
-    //       - Get token class from accepting state
-    //       - If tokenClass == "id", insert into symbolTable_
-    //       - Return Token{tokenClass, lexeme, startLine, startCol}
-    //    b) If no accepting state was reached:
-    //       - Call errorHandler_.reportError(...)
-    //       - Advance cursor_ by 1 (error recovery) and retry / continue
-
-    // Temporary placeholder token
-    Token token{"UNKNOWN", std::string(1, source_[cursor_]), currentLine_, currentColumn_};
-    cursor_++;
-    currentColumn_++;
-    return token;
 }
 
 std::vector<Token> Lexer::tokenizeAll() {
@@ -66,4 +88,4 @@ std::vector<Token> Lexer::tokenizeAll() {
     return tokens;
 }
 
-} // namespace compiler
+}

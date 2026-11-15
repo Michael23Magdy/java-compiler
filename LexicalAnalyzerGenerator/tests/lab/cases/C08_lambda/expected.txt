@@ -1,0 +1,7 @@
+# \L = empty string
+opt a
+opt ab
+opt a
+opt a
+n xy
+!ERR b 1:12

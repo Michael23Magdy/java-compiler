@@ -1,0 +1,14 @@
+# tabs, CRLF, blank lines, runs of blanks
+int int
+id a
+assign =
+num 1
+; ;
+while while
+( (
+id a
+) )
+{ {
+} }
+--symbols--
+a 1

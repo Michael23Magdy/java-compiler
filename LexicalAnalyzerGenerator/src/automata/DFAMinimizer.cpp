@@ -1,49 +1,114 @@
 #include "automata/DFAMinimizer.h"
+#include <map>
 
 namespace compiler {
 
 DFAMinimizer::Partition DFAMinimizer::initialPartition(const DFA& dfa) {
     Partition partition;
+    partition.stateToGroup.assign(dfa.size(), -1);
 
-    // TODO: Create initial partition:
-    // Group 1: Non-accepting states
-    // Group 2..N: Accepting states partitioned by their token class / priority
-    // (states with different token classes MUST NOT be merged)
+    std::set<StateID> nonAcceptingStates;
+    std::map<std::pair<std::string, TokenPriority>, std::set<StateID>> acceptingGroups;
+    const std::vector<DFAState>& allStates = dfa.getStates();
+
+    for (const DFAState& state : allStates) {
+        if (state.isAccepting) {
+            acceptingGroups[std::make_pair(state.tokenClass, state.priority)].insert(state.id);
+        } else {
+            nonAcceptingStates.insert(state.id);
+        }
+    }
+
+    if (!nonAcceptingStates.empty()) {
+        partition.addGroup(nonAcceptingStates);
+    }
+
+    for (const auto& [key, states] : acceptingGroups) {
+        partition.addGroup(states);
+    }
 
     return partition;
 }
 
-int DFAMinimizer::findGroup(StateID state, const Partition& partition) const {
-    // TODO: Find which group/equivalence class in partition contains 'state'
-    for (size_t i = 0; i < partition.size(); ++i) {
-        if (partition[i].find(state) != partition[i].end()) {
-            return static_cast<int>(i);
-        }
+int DFAMinimizer::getGroup(StateID state, const Partition& partition) const {
+    if (state == INVALID_STATE || state < 0 || static_cast<size_t>(state) >= partition.stateToGroup.size()) {
+        return -1;
     }
-    return -1;
+    return partition.stateToGroup[state];
 }
 
 DFAMinimizer::Partition DFAMinimizer::refinePartition(const Partition& current, const DFA& dfa) {
     Partition refined;
 
-    // TODO: Implement partition refinement (Hopcroft's-style):
-    // For each group in current partition, check if all states transition to the same group
-    // for every symbol in the alphabet. If not, split the group.
+    for (auto& group : current.groups) {
+        std::map<std::vector<int>, std::set<StateID>> transitionMap;
+        for (StateID state : group) {
+            std::vector<int> transitions;
+            for (Symbol symbol : dfa.getAlphabet()) {
+                StateID nextState = dfa.getTransition(state, symbol);
+                transitions.push_back(getGroup(nextState, current));
+            }
+            transitionMap[transitions].insert(state);
+        }
+
+        for (const auto& [transitions, states] : transitionMap) {
+            refined.addGroup(states);
+        }
+    }
 
     return refined;
 }
 
 DFA DFAMinimizer::minimize(const DFA& dfa) {
     DFA minimalDfa;
+    Partition partition = initialPartition(dfa);
+    Partition refinedPartition = refinePartition(partition, dfa);
+    while (refinedPartition.groups.size() != partition.groups.size()) {
+        partition = refinedPartition;
+        refinedPartition = refinePartition(partition, dfa);
+    }
 
-    // TODO: Implement DFA minimization:
-    // 1. Compute initial partition
-    // 2. Iteratively refine partition until no changes occur
-    // 3. Construct minimized DFA from final partition equivalence classes
-    // 4. Set start state (group containing original start state)
-    // 5. Set accept states and token classes for each group
-
+    minimalDfa = constructMinimizedDFA(dfa, partition);
+    minimalDfa.setAlphabet(dfa.getAlphabet());
     return minimalDfa;
 }
 
-} // namespace compiler
+DFA DFAMinimizer::constructMinimizedDFA(const DFA& dfa, const Partition& partition) {
+    DFA minimizedDfa;
+    std::map<int, StateID> groupToStateID;
+
+    for (size_t groupIdx = 0; groupIdx < partition.groups.size(); groupIdx++) {
+        StateID newStateID = minimizedDfa.addState();
+        groupToStateID[groupIdx] = newStateID;
+
+        for (StateID oldState : partition.groups[groupIdx]) {
+            const DFAState& oldDFAState = dfa.getState(oldState);
+            if (oldDFAState.isAccepting) {
+                minimizedDfa.setAccepting(newStateID, true, oldDFAState.tokenClass, oldDFAState.priority);
+                break;
+            }
+        }
+    }
+
+    for (size_t groupIdx = 0; groupIdx < partition.groups.size(); groupIdx++) {
+        StateID newFromState = groupToStateID[groupIdx];
+        for (Symbol symbol : dfa.getAlphabet()) {
+            StateID representativeOldState = *partition.groups[groupIdx].begin();
+            StateID oldToState = dfa.getTransition(representativeOldState, symbol);
+            int toGroupIdx = getGroup(oldToState, partition);
+            if (toGroupIdx != -1) {
+                StateID newToState = groupToStateID[toGroupIdx];
+                minimizedDfa.addTransition(newFromState, newToState, symbol);
+            }
+        }
+    }
+
+    int startGroupIdx = getGroup(dfa.getStartState(), partition);
+    if (startGroupIdx != -1) {
+        minimizedDfa.setStartState(groupToStateID[startGroupIdx]);
+    }
+
+    return minimizedDfa;
+}
+
+}

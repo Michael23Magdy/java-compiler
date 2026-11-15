@@ -1,0 +1,8 @@
+# all six reserved words are keyword tokens, not ids
+boolean boolean
+int int
+float float
+if if
+else else
+while while
+--symbols--

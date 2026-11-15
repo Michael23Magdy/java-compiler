@@ -1,0 +1,8 @@
+# keyword lines placed AFTER id still reserve the words (as in the sheet)
+if if
+then then
+id ifthen
+id thenif
+--symbols--
+ifthen 1
+thenif 1

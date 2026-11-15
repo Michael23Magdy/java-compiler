@@ -1,0 +1,11 @@
+a+b
+a-b
+a*b
+a/b
+a+-b
+a--b
+x=-1
+5-3
+a/b*c+d
+a*/b
+a//b

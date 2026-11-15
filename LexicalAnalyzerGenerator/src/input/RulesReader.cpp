@@ -36,4 +36,4 @@ std::vector<std::string> RulesReader::readLines(const std::string& filepath) {
     return lines;
 }
 
-} // namespace compiler
+}

@@ -9,25 +9,16 @@
 
 namespace compiler {
 
-/**
- * @brief Simulates the generated minimal DFA to tokenize source input.
- * Implements Maximal Munch (longest prefix matching) and integrates with Phase 2 parser via getNextToken().
- */
 class Lexer {
 public:
     Lexer(const TransitionTable& table, std::string sourceCode = "");
 
     void setSource(const std::string& sourceCode);
 
-    /**
-     * @brief Reads and returns the next matched token from source input.
-     * Ready for Phase 2 integration where parser requests tokens sequentially.
-     */
+    void setIdentifierClass(const std::string& tokenClass) { identifierClass_ = tokenClass; }
+
     Token getNextToken();
 
-    /**
-     * @brief Tokenizes the entire input source code.
-     */
     std::vector<Token> tokenizeAll();
 
     const SymbolTable& getSymbolTable() const { return symbolTable_; }
@@ -43,10 +34,11 @@ private:
     int currentLine_ = 1;
     int currentColumn_ = 1;
 
+    std::string identifierClass_ = "id";
     SymbolTable symbolTable_;
     ErrorHandler errorHandler_;
 
     void skipWhitespace();
 };
 
-} // namespace compiler
+}

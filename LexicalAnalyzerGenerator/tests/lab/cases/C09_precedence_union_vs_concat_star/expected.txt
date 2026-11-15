@@ -1,0 +1,7 @@
+# a|bc* means a | (b (c*))
+p a
+p b
+p bc
+p bcc
+p a
+!ERR c 1:13

@@ -1,0 +1,8 @@
+# all six relational operators
+relop ==
+relop !=
+relop >=
+relop <=
+relop >
+relop <
+--symbols--

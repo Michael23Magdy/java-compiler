@@ -1,0 +1,2 @@
+opt: a (\L | b)
+n: x \L y

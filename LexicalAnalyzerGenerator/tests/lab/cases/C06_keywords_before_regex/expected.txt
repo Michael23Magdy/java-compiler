@@ -1,0 +1,6 @@
+# keyword lines placed BEFORE id
+if if
+then then
+id ifthen
+--symbols--
+ifthen 1

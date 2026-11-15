@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Wno-unused-parameter -pedantic -Iinclude
+CXXFLAGS = -std=c++17 -O2 -Wall -Wextra -Wno-unused-parameter -pedantic -Iinclude
 BIN_DIR = bin
 BUILD_DIR = build
 
@@ -25,7 +25,7 @@ MAIN_BIN = $(BIN_DIR)/lexical_analyzer_generator
 TEST_SRCS = tests/regex_tests.cpp tests/nfa_tests.cpp tests/dfa_tests.cpp tests/lexer_tests.cpp
 TEST_BINS = $(BIN_DIR)/regex_tests $(BIN_DIR)/nfa_tests $(BIN_DIR)/dfa_tests $(BIN_DIR)/lexer_tests
 
-.PHONY: all clean run tests test_regex test_nfa test_dfa test_lexer
+.PHONY: all clean run tests test_regex test_nfa test_dfa test_lexer lab_tests lab_test
 
 all: $(MAIN_BIN) tests
 
@@ -63,6 +63,15 @@ test_dfa: $(BIN_DIR)/dfa_tests
 
 test_lexer: $(BIN_DIR)/lexer_tests
 	./$(BIN_DIR)/lexer_tests
+
+# Spec-driven lab tests (see tests/lab/run_lab_tests.py)
+lab_tests: $(BIN_DIR)/dump_tokens
+
+$(BIN_DIR)/dump_tokens: tests/lab/dump_tokens.cpp $(CORE_SRCS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) tests/lab/dump_tokens.cpp $(CORE_SRCS) -o $@
+
+lab_test: $(BIN_DIR)/dump_tokens $(MAIN_BIN)
+	python3 tests/lab/run_lab_tests.py
 
 clean:
 	rm -rf $(BIN_DIR)

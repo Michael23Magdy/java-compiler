@@ -1,0 +1,8 @@
+# definition with several ranges used in a larger regex
+hexnum 0x1F
+hexnum 0xff
+!ERR 0 1:11
+!ERR x 1:12
+!ERR 0 1:14
+!ERR x 1:15
+!ERR G 1:16

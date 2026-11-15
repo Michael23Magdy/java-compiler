@@ -1,0 +1,11 @@
+# character ranges, with and without blanks around '-'
+lower a
+lower f
+dig 0
+dig 3
+up A
+up C
+lower b
+!ERR g 1:5
+!ERR 4 1:11
+!ERR D 1:17

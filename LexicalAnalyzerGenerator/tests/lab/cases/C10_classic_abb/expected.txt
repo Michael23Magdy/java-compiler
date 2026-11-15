@@ -1,0 +1,8 @@
+# (a|b)*abb - needs an accepting-prefix search
+q abb
+q aabb
+q babb
+!ERR a 1:15
+!ERR b 1:16
+!ERR a 1:17
+!ERR b 1:18

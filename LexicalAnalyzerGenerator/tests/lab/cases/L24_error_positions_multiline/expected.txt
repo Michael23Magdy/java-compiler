@@ -1,0 +1,11 @@
+# line/column of errors across lines
+int int
+id a
+; ;
+id b
+; ;
+!ERR ? 3:3
+!ERR @ 4:4
+--symbols--
+a 1
+b 3

@@ -4,7 +4,7 @@
 namespace compiler {
 
 bool SymbolTable::insert(const std::string& name, int line, const std::string& type) {
-    // TODO: Insert identifier into table if it doesn't already exist
+
     if (contains(name)) {
         return false;
     }
@@ -37,4 +37,4 @@ void SymbolTable::print(std::ostream& out) const {
     }
 }
 
-} // namespace compiler
+}

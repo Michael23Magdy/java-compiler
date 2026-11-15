@@ -1,0 +1,20 @@
+# longest accepting prefix + error recovery on partial floats
+num 1
+num 5
+num 1.5
+num 2
+num 1.5
+id E
+num 1.5
+id E
+addop +
+num 3
+num 1
+id E5
+!ERR . 1:2
+!ERR . 2:1
+!ERR . 3:4
+!ERR . 6:2
+--symbols--
+E 4
+E5 6

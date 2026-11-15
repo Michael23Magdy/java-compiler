@@ -1,0 +1,13 @@
+# digits cannot continue into letters; maximal munch splits them
+num 1
+id a
+num 12
+id abc
+num 0
+id x1F
+num 1
+if if
+--symbols--
+a 1
+abc 1
+x1F 1

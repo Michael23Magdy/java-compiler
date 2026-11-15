@@ -1,0 +1,22 @@
+# letter (letter|digit)*
+id a
+id A
+id z
+id Z
+id a1
+id A9
+id abc123
+id x1y2z3
+id Q0
+id longIdentifierName99
+--symbols--
+a 1
+A 1
+z 1
+Z 1
+a1 1
+A9 1
+abc123 1
+x1y2z3 1
+Q0 1
+longIdentifierName99 1

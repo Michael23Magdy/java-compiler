@@ -1,0 +1,13 @@
+# error char glued between tokens
+id a
+id b
+id c
+id d
+!ERR @ 1:2
+!ERR # 1:4
+!ERR $ 1:6
+--symbols--
+a 1
+b 1
+c 1
+d 1
