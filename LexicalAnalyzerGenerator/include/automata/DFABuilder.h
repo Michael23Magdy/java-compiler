@@ -19,7 +19,9 @@ public:
      * @param nfa Input NFA (usually combined token NFA).
      * @return Equivalent deterministic finite automaton.
      */
-    DFA build(const NFA& nfa);
+    DFA build(const NFA &nfa);
+
+    void handleAccepting(const std::set<compiler::StateID> &currentDFAStateNFAStates, const compiler::NFA &nfa, compiler::DFA &dfa, compiler::StateID currentDFAStateID);
 
     /**
      * @brief Computes the epsilon-closure of a single state.
