@@ -5,7 +5,7 @@ namespace compiler {
 std::vector<Rule> RulesParser::parse(const std::vector<std::string>& lines) {
     definitions_.clear();
     tokenRules_.clear();
-    nextPriority_ = 0;
+    nextPriority_ = 1;
 
     // Iterate over each line and categorize:
     // 1. Keywords: { ... } -> parseKeywords()
@@ -69,7 +69,8 @@ void RulesParser::parseKeywords(const std::string& line) {
         rule.name = keyword;
         rule.expression = keyword;
         rule.type = RuleType::KEYWORD;
-        rule.priority = -1;
+        // Keywords are reserved: priority 0 beats every regex rule (which start at 1),
+        rule.priority = 0;
 
         tokenRules_.push_back(rule);
     }
