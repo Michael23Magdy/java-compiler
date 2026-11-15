@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
+#include <iostream>
 
 namespace compiler {
 
@@ -48,6 +50,7 @@ private:
     void parsePunctuations(const std::string& line);
 
     std::string expandDefinitions(const std::string& expr);
+    static std::string trim(const std::string& str);
 };
 
 } // namespace compiler
