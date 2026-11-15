@@ -127,10 +127,68 @@ void testBuildFromAST() {
 }
 
 
+
 void testNFAMerging() {
+    using namespace compiler;
+
     std::cout << "[Test] Running NFA Merger tests...\n";
-    // TODO: Add unit tests for merging multiple token NFAs
-    std::cout << "  -> NFA Merger tests passed (stub).\n";
+
+    NFA keyword = NFAConstructor::createLiteralNFA('i');
+    keyword.getState(1).tokenClass = "KEYWORD";
+    keyword.getState(1).priority = 0;
+
+    NFA identifier = NFAConstructor::createLiteralNFA('a');
+    identifier.getState(1).tokenClass = "ID";
+    identifier.getState(1).priority = 1;
+
+    NFA number = NFAConstructor::createLiteralNFA('5');
+    number.getState(1).tokenClass = "NUMBER";
+    number.getState(1).priority = 2;
+
+    NFAMerger merger;
+
+    NFA combined = merger.merge({keyword, identifier, number});
+
+    // One common start + 2 states for each original NFA.
+    assert(combined.size() == 7);
+
+    // All three NFAs should be reachable from the common start.
+    assert(combined.getTransitions(
+        combined.getStartState(), EPSILON).size() == 3);
+
+    // All three accepting states must be preserved.
+    assert(combined.getAcceptStates().size() == 3);
+
+    bool foundKeyword = false;
+    bool foundIdentifier = false;
+    bool foundNumber = false;
+
+    for (StateID state : combined.getAcceptStates()) {
+        const auto& acceptingState = combined.getState(state);
+
+        assert(acceptingState.isAccepting);
+
+        if (acceptingState.tokenClass == "KEYWORD" &&
+            acceptingState.priority == 0) {
+            foundKeyword = true;
+        }
+
+        if (acceptingState.tokenClass == "ID" &&
+            acceptingState.priority == 1) {
+            foundIdentifier = true;
+        }
+
+        if (acceptingState.tokenClass == "NUMBER" &&
+            acceptingState.priority == 2) {
+            foundNumber = true;
+        }
+    }
+
+    assert(foundKeyword);
+    assert(foundIdentifier);
+    assert(foundNumber);
+
+    std::cout << "  -> NFA Merger tests passed.\n";
 }
 
 int main() {
