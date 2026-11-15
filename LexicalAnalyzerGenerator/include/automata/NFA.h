@@ -23,6 +23,7 @@ public:
     NFA();
 
     StateID addState();
+    StateID append(const NFA& other, std::vector<StateID>& stateMap);
     void addTransition(StateID from, StateID to, Symbol symbol);
     void setAccepting(StateID state, bool isAccepting, const std::string& tokenClass = "", TokenPriority priority = -1);
 
