@@ -1,0 +1,11 @@
+int main;
+boolean ready;
+float total;
+
+ready = 1;
+total = 25.75;
+if (ready == 1) {
+    total = total * 2;
+} else {
+    total = total / 2;
+}

@@ -1,0 +1,8 @@
+int value;
+value = 42;
+while (value > 0) {
+    value = value - 1;
+}
+
+@invalid #token
+value = 3.14E2;
