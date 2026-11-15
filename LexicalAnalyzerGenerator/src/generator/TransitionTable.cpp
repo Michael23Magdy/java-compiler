@@ -5,11 +5,24 @@ namespace compiler {
 TransitionTable TransitionTable::fromDFA(const DFA& dfa) {
     TransitionTable table;
 
-    // TODO: Convert DFA into 2D transition table representation:
-    // 1. Populate alphabet and symbolToIndex mapping
-    // 2. Allocate table_ of size [stateCount][alphabetSize]
-    // 3. Fill in transitions (DEAD_STATE / INVALID_STATE for missing transitions)
-    // 4. Fill in stateInfos_ with acceptance and token class data
+    const auto& alpha = dfa.getAlphabet();
+    table.alphabet_.assign(alpha.begin(), alpha.end());
+    for (size_t i = 0; i < table.alphabet_.size(); i++) {
+        table.symbolToIndex_[table.alphabet_[i]] = static_cast<int>(i);
+    }
+
+    const size_t n = dfa.size();
+    table.table_.assign(n, std::vector<StateID>(table.alphabet_.size(), INVALID_STATE));
+    table.stateInfos_.resize(n);
+    for (size_t s = 0; s < n; s++) {
+        const DFAState& st = dfa.getState(static_cast<StateID>(s));
+        for (size_t i = 0; i < table.alphabet_.size(); i++) {
+            table.table_[s][i] = dfa.getTransition(static_cast<StateID>(s), table.alphabet_[i]);
+        }
+        table.stateInfos_[s] = StateInfo{static_cast<StateID>(s), st.isAccepting,
+                                         st.isAccepting ? st.tokenClass : "",
+                                         st.isAccepting ? st.priority : -1};
+    }
 
     table.startState_ = dfa.getStartState();
     table.stateCount_ = dfa.size();
@@ -18,7 +31,6 @@ TransitionTable TransitionTable::fromDFA(const DFA& dfa) {
 }
 
 StateID TransitionTable::getNextState(StateID current, Symbol symbol) const {
-    // TODO: Look up next state from table_ using current state and symbol
     auto it = symbolToIndex_.find(symbol);
     if (it != symbolToIndex_.end() && current >= 0 && static_cast<size_t>(current) < table_.size()) {
         return table_[current][it->second];
