@@ -42,7 +42,7 @@ public:
 private:
     std::map<std::string, std::string> definitions_;
     std::vector<Rule> tokenRules_;
-    int nextPriority_ = 0;
+    int nextPriority_ = 1;   // priority 0 is reserved for keywords; regex/punctuation rules start at 1
 
     void parseRegularDefinition(const std::string& line);
     void parseRegularExpression(const std::string& line);
