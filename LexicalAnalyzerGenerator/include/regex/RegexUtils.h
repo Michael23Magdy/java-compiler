@@ -3,6 +3,7 @@
 #include "common/Constants.h"
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 namespace compiler {
 
