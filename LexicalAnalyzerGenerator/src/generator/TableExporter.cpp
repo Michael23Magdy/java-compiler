@@ -48,4 +48,4 @@ void TableExporter::exportToStream(const TransitionTable& table, std::ostream& o
     }
 }
 
-} // namespace compiler
+}

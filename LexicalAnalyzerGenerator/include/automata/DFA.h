@@ -15,7 +15,7 @@ struct DFAState {
     std::string tokenClass = "";
     TokenPriority priority = -1;
     std::map<Symbol, StateID> transitions;
-    std::set<StateID> nfaStates; // NFA states represented by this DFA state
+    std::set<StateID> nfaStates;
 };
 
 class DFA {
@@ -54,4 +54,4 @@ private:
     bool validState(StateID state) const;
 };
 
-} // namespace compiler
+}

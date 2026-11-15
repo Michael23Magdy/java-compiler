@@ -59,4 +59,4 @@ TokenPriority TransitionTable::getPriority(StateID state) const {
     return -1;
 }
 
-} // namespace compiler
+}

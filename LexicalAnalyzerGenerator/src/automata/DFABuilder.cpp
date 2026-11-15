@@ -89,4 +89,4 @@ void DFABuilder::handleAccepting(const std::set<StateID> &NFAStates, const NFA &
     }
 }
 
-} // namespace compiler
+}

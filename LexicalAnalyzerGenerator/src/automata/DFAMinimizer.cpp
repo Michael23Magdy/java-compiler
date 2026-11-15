@@ -111,4 +111,4 @@ DFA DFAMinimizer::constructMinimizedDFA(const DFA& dfa, const Partition& partiti
     return minimizedDfa;
 }
 
-} // namespace compiler
+}

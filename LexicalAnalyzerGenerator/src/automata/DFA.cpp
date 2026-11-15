@@ -54,4 +54,4 @@ StateID DFA::getTransition(StateID from, Symbol symbol) const {
     return it->second;
 }
 
-} // namespace compiler
+}
