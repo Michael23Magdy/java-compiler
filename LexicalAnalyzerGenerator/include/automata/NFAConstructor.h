@@ -19,11 +19,6 @@ public:
      */
     NFA buildFromAST(const std::shared_ptr<RegexNode>& root, const std::string& tokenClass = "", TokenPriority priority = -1);
 
-    /**
-     * @brief Builds an NFA from a postfix regex string.
-     */
-    NFA buildFromPostfix(const std::string& postfix, const std::string& tokenClass = "", TokenPriority priority = -1);
-
     // Thompson basic construction building blocks
     static NFA createLiteralNFA(char ch);
     static NFA createEpsilonNFA();
