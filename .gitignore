@@ -16,3 +16,4 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile.cmake
+LexicalAnalyzerGenerator/output/pipeline_test_table.txt
