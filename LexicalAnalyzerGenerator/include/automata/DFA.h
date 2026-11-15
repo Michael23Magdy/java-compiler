@@ -15,7 +15,7 @@ struct DFAState {
     std::string tokenClass = "";
     TokenPriority priority = -1;
     std::map<Symbol, StateID> transitions;
-    std::set<StateID> nfaStates; // NFA states represented by this DFA state
+    std::set<StateID> nfaStates;
 };
 
 class DFA {
@@ -25,6 +25,9 @@ public:
     StateID addState();
     void addTransition(StateID from, StateID to, Symbol symbol);
     void setAccepting(StateID state, bool isAccepting, const std::string& tokenClass = "", TokenPriority priority = -1);
+    
+    void setNFAStates(StateID state, const std::set<StateID>& nfaStates);
+    std::set<StateID> getNFAStates(StateID state) const;
 
     StateID getStartState() const { return startState_; }
     void setStartState(StateID start) { startState_ = start; }
@@ -47,6 +50,8 @@ private:
     std::vector<StateID> acceptStates_;
     std::vector<DFAState> states_;
     std::set<Symbol> alphabet_;
+
+    bool validState(StateID state) const;
 };
 
-} // namespace compiler
+}

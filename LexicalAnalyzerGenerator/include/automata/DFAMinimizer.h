@@ -1,32 +1,51 @@
 #pragma once
 
-#include "DFA.h"
+#include "automata/DFA.h"
+#include "common/Types.h"
+#include "common/Constants.h"
 #include <vector>
 #include <set>
+#include <map>
 
 namespace compiler {
 
-/**
- * @brief Minimizes a DFA using partition refinement (Hopcroft's-style algorithm).
- * Distinguishes accepting states by their token classes and priorities.
- */
-class DFAMinimizer {
-public:
-    DFAMinimizer() = default;
+struct Partition {
+    std::vector<std::set<StateID>> groups;
+    std::vector<int> stateToGroup;
 
-    /**
-     * @brief Produces a minimal DFA equivalent to the input DFA.
-     * @param dfa Input deterministic finite automaton.
-     * @return Minimized DFA with redundant states merged and dead states handled.
-     */
-    DFA minimize(const DFA& dfa);
-
-private:
-    using Partition = std::vector<std::set<StateID>>;
-
-    Partition initialPartition(const DFA& dfa);
-    Partition refinePartition(const Partition& current, const DFA& dfa);
-    int findGroup(StateID state, const Partition& partition) const;
+    int addGroup(const std::set<StateID>& states) {
+        int groupIdx = static_cast<int>(groups.size());
+        groups.push_back(states);
+        for (StateID s : states) {
+            if (s >= static_cast<int>(stateToGroup.size())) {
+                stateToGroup.resize(s + 1, -1);
+            }
+            if (s >= 0) {
+                stateToGroup[s] = groupIdx;
+            }
+        }
+        return groupIdx;
+    }
 };
 
-} // namespace compiler
+class DFAMinimizer {
+public:
+    using Partition = compiler::Partition;
+
+    DFAMinimizer() = default;
+
+    DFA minimize(const DFA& dfa);
+
+    int getGroup(StateID state, const Partition& partition) const;
+
+    int addGroup(Partition& partition, const std::set<StateID>& states) const {
+        return partition.addGroup(states);
+    }
+
+private:
+    DFA constructMinimizedDFA(const DFA& dfa, const Partition& partition) ;
+    Partition initialPartition(const DFA& dfa);
+    Partition refinePartition(const Partition& current, const DFA& dfa);
+};
+
+}
