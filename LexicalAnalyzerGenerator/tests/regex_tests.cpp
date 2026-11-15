@@ -50,12 +50,45 @@ void testRegexUtils() {
 }
 
 void testRegexParser() {
+    using namespace compiler;
+
     std::cout << "[Test] Running RegexParser tests...\n";
-    // TODO: Add unit tests for RegexParser AST construction
-    compiler::RegexParser parser;
+
+    RegexParser parser;
+
+    // Union: a|b
     auto ast = parser.parse("a|b");
-    assert(ast != nullptr);
-    std::cout << "  -> RegexParser tests passed (stub).\n";
+    assert(ast->getType() == RegexNodeType::UNION);
+
+    // Concatenation: ab
+    ast = parser.parse("ab");
+    assert(ast->getType() == RegexNodeType::CONCAT);
+
+    // Kleene star: a*
+    ast = parser.parse("a*");
+    assert(ast->getType() == RegexNodeType::STAR);
+
+    // Plus: a+
+    ast = parser.parse("a+");
+    assert(ast->getType() == RegexNodeType::PLUS);
+
+    // Lambda: \L
+    ast = parser.parse("\\L");
+    assert(ast->getType() == RegexNodeType::EPSILON);
+
+    // Escaped operator: \+
+    ast = parser.parse("\\+");
+    assert(ast->getType() == RegexNodeType::LITERAL);
+
+    auto literal = std::dynamic_pointer_cast<LiteralNode>(ast);
+    assert(literal != nullptr);
+    assert(literal->getCharacter() == '+');
+
+    // Combined expression: a(b|c)*
+    ast = parser.parse("a(b|c)*");
+    assert(ast->getType() == RegexNodeType::CONCAT);
+
+    std::cout << "  -> RegexParser tests passed.\n";
 }
 
 int main() {
